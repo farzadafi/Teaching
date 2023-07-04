@@ -8,31 +8,11 @@ import java.util.List;
 
 public class Farmer {
 
-    public List<Apple> filterGreenApple(List<Apple> inventory) {
+    public List<Apple> filterColorApple(List<Apple> inventory, Colors colors) {
         List<Apple> result = new ArrayList<>();
         for (Apple apple : inventory
         ) {
-            if (apple.getColors().equals(Colors.GREEN))
-                result.add(apple);
-        }
-        return result;
-    }
-
-    public List<Apple> filterRedApple(List<Apple> inventory) {
-        List<Apple> result = new ArrayList<>();
-        for (Apple apple : inventory
-        ) {
-            if (apple.getColors().equals(Colors.RED))
-                result.add(apple);
-        }
-        return result;
-    }
-
-    public List<Apple> filterYellowApple(List<Apple> inventory) {
-        List<Apple> result = new ArrayList<>();
-        for (Apple apple : inventory
-        ) {
-            if (apple.getColors().equals(Colors.YELLOW))
+            if (apple.getColors().equals(colors))
                 result.add(apple);
         }
         return result;
