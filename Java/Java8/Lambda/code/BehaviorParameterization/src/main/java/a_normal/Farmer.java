@@ -37,4 +37,14 @@ public class Farmer {
         }
         return result;
     }
+
+    public List<Apple> filterHeavyApple(List<Apple> inventory) {
+        List<Apple> result = new ArrayList<>();
+        for (Apple apple : inventory
+        ) {
+            if (apple.getWeight() > 150)
+                result.add(apple);
+        }
+        return result;
+    }
 }
