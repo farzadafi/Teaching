@@ -1,6 +1,6 @@
-package main.java.b_perdicate_class.color;
+package main.java.b_perdicate_class.predicate.color;
 
-import main.java.b_perdicate_class.ApplePredicate;
+import main.java.b_perdicate_class.predicate.ApplePredicate;
 import main.java.base.Apple;
 import main.java.base.Colors;
 

@@ -1,6 +1,6 @@
-package main.java.b_perdicate_class.weight;
+package main.java.b_perdicate_class.predicate.weight;
 
-import main.java.b_perdicate_class.ApplePredicate;
+import main.java.b_perdicate_class.predicate.ApplePredicate;
 import main.java.base.Apple;
 
 public class AppleHeavyWeightPredicate implements ApplePredicate {
