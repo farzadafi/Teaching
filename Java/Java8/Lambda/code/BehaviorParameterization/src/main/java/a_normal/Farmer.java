@@ -27,4 +27,14 @@ public class Farmer {
         }
         return result;
     }
+
+    public List<Apple> filterYellowApple(List<Apple> inventory) {
+        List<Apple> result = new ArrayList<>();
+        for (Apple apple : inventory
+        ) {
+            if (apple.getColors().equals(Colors.YELLOW))
+                result.add(apple);
+        }
+        return result;
+    }
 }
