@@ -1,4 +1,4 @@
-package main.java;
+package main.java.base;
 
 public class Apple {
     private Colors colors;

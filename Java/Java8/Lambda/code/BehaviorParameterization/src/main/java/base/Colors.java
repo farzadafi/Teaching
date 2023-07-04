@@ -1,4 +1,4 @@
-package main.java;
+package main.java.base;
 
 public enum Colors {
     RED,
