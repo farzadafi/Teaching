@@ -1,6 +1,4 @@
 # Teaching
 
-امير المؤمنين على بن ابيطالب عليه السّلام </br>
-زكوة العلم نشره </br>
-زکات دانش،نشر آن است. 
+![hadis_image](https://github.com/farzadafi/Teaching/blob/master/newhadis.png)
 استفاده با ذکر صلوات :)
