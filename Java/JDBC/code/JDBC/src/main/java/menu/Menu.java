@@ -35,4 +35,8 @@ public class Menu {
         else
             System.out.println("Enter to your account!");
     }
+
+    public void registerMenu(){
+        userService.addUser();
+    }
 }
