@@ -1,11 +1,15 @@
 package menu;
 
 import model.User;
+import service.UserService;
+import utility.ApplicationContext;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Menu {
     Scanner input = new Scanner(System.in);
+    private final UserService userService = ApplicationContext.getUserService();
 
     public int publicMenu() {
         int command;
@@ -24,7 +28,7 @@ public class Menu {
         };
     }
 
-    public void enterMenu() {
+    public void enterMenu() throws SQLException {
         System.out.print("Enter your username:");
         String username = input.nextLine();
         System.out.print("Enter your password:");
@@ -36,7 +40,7 @@ public class Menu {
             System.out.println("Enter to your account!");
     }
 
-    public void registerMenu(){
-        userService.addUser();
+    public void registerMenu() throws SQLException {
+        userService.save();
     }
 }
