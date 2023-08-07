@@ -16,7 +16,7 @@ public class UserRepository {
     }
 
     public int save(User user) throws SQLException {
-        String add = " INSERT INTO UserTable(fullname,nationalId,password) VALUES (?, ?, ?, ?)";
+        String add = " INSERT INTO users(firstname,lastname, username,password) VALUES (?, ?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(add);
         preparedStatement.setString(1, user.getFirstname());
         preparedStatement.setString(2, user.getLastname());
@@ -26,7 +26,7 @@ public class UserRepository {
     }
 
     public User login(String username) throws SQLException {
-        String login = "SELECT * FROM UserTable WHERE username = ?";
+        String login = "SELECT * FROM users WHERE username = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(login);
         preparedStatement.setString(1, username);
         ResultSet resultSet = preparedStatement.executeQuery();
