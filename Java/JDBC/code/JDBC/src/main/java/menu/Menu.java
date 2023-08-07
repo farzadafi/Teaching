@@ -1,12 +1,14 @@
 package menu;
 
+import model.User;
+
 import java.util.Scanner;
 
 public class Menu {
     Scanner input = new Scanner(System.in);
 
     public int publicMenu() {
-        int command = 1;
+        int command;
         System.out.println("***WELCOME***");
         System.out.println("1-Sing in");
         System.out.println("2-Sing Up");
@@ -20,5 +22,17 @@ public class Menu {
             case 3 -> 3;
             default -> 0;
         };
+    }
+
+    public void enterMenu() {
+        System.out.print("Enter your username:");
+        String username = input.nextLine();
+        System.out.print("Enter your password:");
+        String password = input.nextLine();
+        User user = userService.login(username, password);
+        if (user == null)
+            System.out.println("You enter a wrong username or password");
+        else
+            System.out.println("Enter to your account!");
     }
 }
