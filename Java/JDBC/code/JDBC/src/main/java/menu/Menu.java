@@ -48,11 +48,17 @@ public class Menu {
                 input.nextLine();
                 switch (command) {
                     case 1 -> userService.updateFirstname(user);
-                    case 2 -> System.out.println("naser");
+                    case 2 -> {
+                        int result = userService.deleteAccount(user);
+                        if (result >= 0) {
+                            System.out.println("your account successfully deleted");
+                            isTrue = false;
+                        } else
+                            System.out.println("something is wrong");
+                    }
                     case 3 -> isTrue = false;
                     default -> System.out.println("enter a correct number :)");
                 }
-                ;
             }
         }
     }
