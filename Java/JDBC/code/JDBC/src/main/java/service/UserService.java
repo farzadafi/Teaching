@@ -41,6 +41,10 @@ public class UserService {
             System.out.println("your first name changed to " + firstname);
     }
 
+    public int deleteAccount(User user) throws SQLException {
+        return userRepository.delete(user.getId());
+    }
+
     public User getFullInformation() {
         System.out.print("Enter your firstname:");
         String firstname = input.nextLine();
