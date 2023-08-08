@@ -47,4 +47,11 @@ public class UserRepository {
         preparedStatement.setInt(2, user.getId());
         return preparedStatement.executeUpdate();
     }
+
+    public int delete(int id) throws SQLException {
+        String login = "DELETE FROM users WHERE id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(login);
+        preparedStatement.setInt(1, id);
+        return preparedStatement.executeUpdate();
+    }
 }
