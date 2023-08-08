@@ -32,6 +32,15 @@ public class UserService {
             return null;
     }
 
+    public void updateFirstname(User user) throws SQLException {
+        System.out.println("Please enter your new firstname:");
+        String firstname = input.nextLine();
+        user.setFirstname(firstname);
+        int result = userRepository.updateFirstname(user);
+        if (result >= 1)
+            System.out.println("your first name changed to " + firstname);
+    }
+
     public User getFullInformation() {
         System.out.print("Enter your firstname:");
         String firstname = input.nextLine();
