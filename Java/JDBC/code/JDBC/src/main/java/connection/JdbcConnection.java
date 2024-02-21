@@ -13,7 +13,7 @@ public class JdbcConnection {
         try {
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
                     "postgres",
-                    "afshar");
+                    "postgres");
         } catch (SQLException sql) {
             System.out.println(sql.getMessage());
         }
