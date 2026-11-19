@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Coding — Project Documentation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #08080f;
+    --accent: #7c5cff;
+    --accent2: #00d4ff;
+    --accent3: #ff5c9d;
+    --accent4: #00ffa3;
+    --text: #eef0ff;
+    --muted: #8a8aa8;
+    --card: rgba(255,255,255,0.035);
+    --border: rgba(255,255,255,0.09);
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(124,92,255,0.18), transparent 42%),
+      radial-gradient(circle at 85% 85%, rgba(0,212,255,0.14), transparent 42%),
+      radial-gradient(circle at 50% 50%, rgba(255,92,157,0.07), transparent 65%);
+    animation: floatBg 22s ease-in-out infinite alternate;
+    z-index: 0;
+  }
+  @keyframes floatBg {
+    0% { transform: scale(1) translate(0,0); }
+    100% { transform: scale(1.25) translate(-3%, 3%); }
+  }
+
+  /* ===== Logo (top-left, fixed across all slides) ===== */
+  .brand-logo {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.8rem;
+    height: 350px;
+    width: auto;
+    z-index: 200;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.3s;
+  }
+  @media (max-width: 768px) {
+    .brand-logo { height: 36px; top: 1rem; left: 1rem; }
+  }
+
+  /* Slides */
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5vh 7vw;
+    opacity: 0;
+    transform: translateY(40px) scale(0.985);
+    transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 1;
+    text-align: center;
+    overflow-y: auto;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .slide::-webkit-scrollbar { width: 6px; }
+  .slide::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 99px; }
+
+  .slide-inner {
+    width: 100%;
+    max-width: 1150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+  }
+
+  .eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.4rem;
+    opacity: 0.85;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.08;
+    margin-bottom: 1.3rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradShift 7s ease infinite;
+  }
+  @keyframes gradShift {
+    0%,100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  h2 {
+    font-size: clamp(1.7rem, 3.8vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 1.6rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 1.9vw, 1.4rem);
+    color: var(--muted);
+    max-width: 850px;
+    line-height: 1.65;
+  }
+
+  .highlight { color: var(--accent2); font-weight: 600; }
+  .highlight-pink { color: var(--accent3); font-weight: 600; }
+  .highlight-purple { color: var(--accent); font-weight: 600; }
+  .highlight-green { color: var(--accent4); font-weight: 600; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem;
+    width: 100%;
+    margin-top: 1.8rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.7rem 1.5rem;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    text-align: left;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(124,92,255,0.5);
+    box-shadow: 0 20px 40px rgba(124,92,255,0.15);
+  }
+  .card .icon { font-size: 1.9rem; margin-bottom: 0.8rem; display: block; }
+  .card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent2); }
+  .card p { color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
+
+  .checklist {
+    list-style: none;
+    text-align: left;
+    max-width: 750px;
+    width: 100%;
+    margin-top: 1.4rem;
+  }
+  .checklist li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+    padding: 0.8rem 1.3rem;
+    margin-bottom: 0.6rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .checklist li:hover {
+    transform: translateX(8px);
+    border-color: rgba(0,212,255,0.4);
+  }
+  .checklist li::before {
+    content: '▹';
+    color: var(--accent2);
+    font-size: 1.3rem;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .doc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.8rem;
+    max-width: 1000px;
+    width: 100%;
+    margin-top: 1.8rem;
+  }
+  .doc-card {
+    background: linear-gradient(160deg, rgba(124,92,255,0.12), rgba(0,212,255,0.05));
+    border: 1px solid rgba(124,92,255,0.3);
+    border-radius: 22px;
+    padding: 2.2rem 1.8rem;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .doc-card:hover { transform: translateY(-5px); border-color: rgba(124,92,255,0.6); }
+  .doc-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(124,92,255,0.15), transparent 60%);
+    pointer-events: none;
+  }
+  .doc-card h3 {
+    font-size: clamp(1.3rem, 2.3vw, 1.9rem);
+    margin-bottom: 0.5rem;
+    color: var(--accent2);
+    position: relative;
+  }
+  .doc-card .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(124,92,255,0.2);
+    color: var(--accent);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .doc-card p {
+    color: var(--muted);
+    line-height: 1.65;
+    font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+    position: relative;
+  }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+    width: 100%;
+  }
+  .flow-step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.3rem;
+    font-size: clamp(0.85rem, 1.3vw, 1rem);
+    font-weight: 600;
+    color: var(--text);
+    min-width: 150px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .flow-step:hover { transform: translateY(-4px); border-color: rgba(0,212,255,0.5); }
+  .flow-step .num {
+    display: inline-block;
+    width: 24px; height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(124,92,255,0.25);
+    color: var(--accent);
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+  }
+  .flow-arrow { color: var(--muted); font-size: 1.3rem; }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 950px;
+    margin-top: 1.5rem;
+    text-align: left;
+  }
+  .compare-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.5rem;
+  }
+  .compare-box h4 {
+    font-size: 1.05rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .compare-box ul {
+    list-style: none;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.8;
+  }
+  .compare-box ul li::before {
+    content: '•';
+    color: var(--accent2);
+    margin-right: 0.5rem;
+  }
+  .compare-box.keep { border-color: rgba(0,255,163,0.3); }
+  .compare-box.keep h4 { color: var(--accent4); }
+  .compare-box.keep ul li::before { color: var(--accent4); }
+  .compare-box.cut { border-color: rgba(255,92,157,0.3); }
+  .compare-box.cut h4 { color: var(--accent3); }
+  .compare-box.cut ul li::before { color: var(--accent3); content: '✕'; font-size: 0.75rem; }
+
+  .quote {
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    font-style: italic;
+    color: var(--text);
+    max-width: 800px;
+    line-height: 1.6;
+    padding: 1.8rem 2rem;
+    background: var(--card);
+    border-left: 3px solid var(--accent2);
+    border-radius: 14px;
+    margin-top: 1.5rem;
+    text-align: left;
+  }
+
+  .progress {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent4));
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    box-shadow: 0 0 15px rgba(124,92,255,0.6);
+  }
+  .counter {
+    position: fixed;
+    bottom: 1.4rem; right: 2rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    z-index: 100;
+    background: rgba(8,8,15,0.75);
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+  .hint {
+    position: fixed;
+    bottom: 1.4rem; left: 2rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(8,8,15,0.75);
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 0.45; }
+    50% { opacity: 1; }
+  }
+  kbd {
+    display: inline-block;
+    padding: 0.12rem 0.45rem;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 0.78em;
+    color: var(--accent2);
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  .pill {
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+  }
+
+  @media (max-width: 768px) {
+    .doc-grid, .compare { grid-template-columns: 1fr; }
+    .slide { padding: 4vh 5vw; }
+    .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Logo (fixed, all slides) ===== -->
+<img src="logo.png" alt="logo" class="brand-logo" onerror="this.style.display='none'">
+
+<!-- 1. Title -->
+<div class="slide active" data-slide="0">
+  <div class="slide-inner">
+    <div class="eyebrow">Vibe Coding · Project Setup</div>
+    <h1>Project Documentation</h1>
+    <p class="subtitle">Before we build <span class="highlight">anything</span>, let's take a moment to think about our project documentation.</p>
+  </div>
+</div>
+
+<!-- 2. The Role of Project Documentation -->
+<div class="slide" data-slide="1">
+  <div class="slide-inner">
+    <div class="eyebrow">01 · Foundation</div>
+    <h2>The Role of <span class="highlight">Project Documentation</span></h2>
+    <div class="grid">
+      <div class="card">
+        <span class="icon">🧭</span>
+        <h3>Clear Direction</h3>
+        <p>Defines what we're building and why — before a single line of code.</p>
+      </div>
+      <div class="card">
+        <span class="icon">⚡</span>
+        <h3>Efficient Workflow</h3>
+        <p>Well-scoped docs let AI tools like Lovable deliver better results, faster.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🎯</span>
+        <h3>Alignment</h3>
+        <p>Keeps the AI (and us) focused on the real goals of the project.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Lovable Knowledge Files -->
+<div class="slide" data-slide="2">
+  <div class="slide-inner">
+    <div class="eyebrow">02 · Lovable Guides</div>
+    <h2>Lovable <span class="highlight">Knowledge Files</span></h2>
+    <p class="subtitle">Scroll down in the Lovable guides to the <span class="highlight-purple">knowledge files</span> section — it suggests important information we should include.</p>
+    <div class="grid" style="max-width: 1000px;">
+      <div class="card">
+        <span class="icon">🎯</span>
+        <h3>Project Overview</h3>
+        <p>A brief description of the project, goals and objectives.</p>
+      </div>
+      <div class="card">
+        <span class="icon">👥</span>
+        <h3>User Personas</h3>
+        <p>Who the users are and what they need.</p>
+      </div>
+      <div class="card">
+        <span class="icon">⚙️</span>
+        <h3>Feature Specifications</h3>
+        <p>Detailed specs of the features to be built.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🎨</span>
+        <h3>Design Assets</h3>
+        <p>Wireframes, sketches, and visual references.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Core Scope vs Complexity -->
+<div class="slide" data-slide="3">
+  <div class="slide-inner">
+    <div class="eyebrow">03 · Scope</div>
+    <h2>Core Scope vs. <span class="highlight-pink">Project Complexity</span></h2>
+    <p class="subtitle">This all depends on the complexity of what you're building.</p>
+    <div class="compare">
+      <div class="compare-box keep">
+        <h4>✅ In Our Example</h4>
+        <ul>
+          <li>Project overview</li>
+          <li>Key feature specs</li>
+          <li>Design assets (light)</li>
+        </ul>
+      </div>
+      <div class="compare-box cut">
+        <h4>✕ Skip For Now</h4>
+        <ul>
+          <li>Detailed user personas</li>
+          <li>Full wireframe suite</li>
+          <li>Everything else listed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. The 2 Essential Documents -->
+<div class="slide" data-slide="4">
+  <div class="slide-inner">
+    <div class="eyebrow">04 · The Plan</div>
+    <h2>The <span class="highlight">2 Essential</span> Pre-Build Documents</h2>
+    <div class="doc-grid">
+      <div class="doc-card">
+        <span class="tag">Document 01</span>
+        <h3>PRD</h3>
+        <p><strong style="color:var(--text)">Product Requirements Document</strong><br><br>Describes <em>what</em> we're building, <em>why</em>, and <em>how</em> it should work.</p>
+      </div>
+      <div class="doc-card">
+        <span class="tag">Document 02</span>
+        <h3>DB Schema</h3>
+        <p><strong style="color:var(--text)">Database Schema</strong><br><br>Defines the <em>structure</em> and <em>relationships</em> of our data.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. PRD -->
+<div class="slide" data-slide="5">
+  <div class="slide-inner">
+    <div class="eyebrow">05 · Document 01</div>
+    <h2>PRD — <span class="highlight">Product Requirements Document</span></h2>
+    <ul class="checklist">
+      <li>Goals &amp; purpose</li>
+      <li>Key features</li>
+      <li>Functional requirements</li>
+      <li>Wireframes or sketches</li>
+    </ul>
+    <p class="subtitle" style="margin-top:1.5rem; max-width:750px;">Some items from the Lovable docs map directly into the PRD — this is <span class="highlight-pink">super important</span> for defining exactly what features the application needs.</p>
+  </div>
+</div>
+
+<!-- 7. Database Schema -->
+<div class="slide" data-slide="6">
+  <div class="slide-inner">
+    <div class="eyebrow">06 · Document 02</div>
+    <h2>Database <span class="highlight">Schema Design</span></h2>
+    <ul class="checklist">
+      <li>Tables or collections</li>
+      <li>Fields</li>
+      <li>Data types</li>
+      <li>Relationships</li>
+    </ul>
+    <p class="subtitle" style="margin-top:1.5rem; max-width:750px;">The schema defines the <span class="highlight-purple">structure and relationships</span> of our data — the backbone of the app.</p>
+  </div>
+</div>
+
+<!-- 8. DeepSeek for PRD -->
+<div class="slide" data-slide="7">
+  <div class="slide-inner">
+    <div class="eyebrow">07 · Tooling</div>
+    <h2>Leveraging <span class="highlight">DeepSeek</span> for PRD Generation</h2>
+    <p class="subtitle">Before touching Lovable, we go to <span class="highlight-purple">DeepSeek</span> and ask it to help us create the PRD for our platform.</p>
+    <div class="quote">"An educational website"</div>
+    <div class="pills">
+      <span class="pill">🎯 Prompt DeepSeek</span>
+      <span class="pill">📝 Generate draft</span>
+      <span class="pill">🔁 Iterate until happy</span>
+    </div>
+  </div>
+</div>
+
+<!-- 9. Workflow -->
+<div class="slide" data-slide="8">
+  <div class="slide-inner">
+    <div class="eyebrow">08 · Workflow</div>
+    <h2>Step-by-Step: <span class="highlight">PRD First, Schema Next</span></h2>
+    <div class="flow">
+      <div class="flow-step"><span class="num">1</span>Prompt DeepSeek</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="num">2</span>Draft PRD</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="num">3</span>Review &amp; Refine</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="num">4</span>Build DB Schema</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="num">5</span>Start in Lovable</div>
+    </div>
+    <p class="subtitle" style="margin-top:1.8rem;">One thing at a time — PRD first, then the schema.</p>
+  </div>
+</div>
+
+<!-- 10. Iterative Refinement -->
+<div class="slide" data-slide="9">
+  <div class="slide-inner">
+    <div class="eyebrow">09 · Iteration</div>
+    <h2>Iterative <span class="highlight-pink">Refinement</span></h2>
+    <p class="subtitle">The first PRD is rarely perfect. We iterate until we're happy with the result — <span class="highlight">then</span> we move to the database schema.</p>
+    <div class="grid" style="max-width:900px;">
+      <div class="card">
+        <span class="icon">🔍</span>
+        <h3>Review</h3>
+        <p>Read each point carefully. Slow down.</p>
+      </div>
+      <div class="card">
+        <span class="icon">✏️</span>
+        <h3>Adjust</h3>
+        <p>Add what's missing, fix what's unclear.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🔁</span>
+        <h3>Repeat</h3>
+        <p>Until the PRD matches your vision.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 11. Review & Pruning -->
+<div class="slide" data-slide="10">
+  <div class="slide-inner">
+    <div class="eyebrow">10 · Pruning</div>
+    <h2>The <span class="highlight">Review &amp; Pruning</span> Process</h2>
+    <p class="subtitle">Extra work — but <span class="highlight-green">super important</span>.</p>
+    <div class="compare">
+      <div class="compare-box cut">
+        <h4>✕ Remove</h4>
+        <ul>
+          <li>Unnecessary sections</li>
+          <li>Features you never requested</li>
+          <li>Ideas that can wait for later</li>
+        </ul>
+      </div>
+      <div class="compare-box keep">
+        <h4>✅ Keep &amp; Verify</h4>
+        <ul>
+          <li>Everything you described</li>
+          <li>Correctly explained points</li>
+          <li>Missing functionalities added</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 12. Scope Verification -->
+<div class="slide" data-slide="11">
+  <div class="slide-inner">
+    <div class="eyebrow">11 · Alignment</div>
+    <h2>Scope <span class="highlight">Verification</span> &amp; Alignment</h2>
+    <p class="subtitle">Make sure everything you described is included and correctly explained. Any unnecessary info can be removed — this makes the whole process more efficient.</p>
+    <ul class="checklist">
+      <li>All requested features present</li>
+      <li>Out-of-scope items removed</li>
+      <li>Explanations are accurate &amp; clear</li>
+      <li>PRD optimized for the next step</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 13. Closing -->
+<div class="slide" data-slide="12">
+  <div class="slide-inner">
+    <div class="eyebrow">Next Up</div>
+    <h2>Now the <span class="highlight">Database Schema</span> 🚀</h2>
+    <p class="subtitle">With an optimized PRD in hand, we're ready to design the database schema — and then let Lovable build our virtual menu app.</p>
+    <p class="subtitle" style="margin-top:1.5rem; color:var(--accent2); font-weight:600;">I can't wait to try it out.</p>
+  </div>
+</div>
+
+<!-- Controls -->
+<div class="progress" id="progress" style="width: 0%"></div>
+<div class="counter" id="counter">01 / 13</div>
+<div class="hint"><kbd>Space</kbd> next · <kbd>←</kbd><kbd>→</kbd> navigate</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  function showSlide(index) {
+    if (index < 0) index = 0;
+    if (index >= slides.length) index = slides.length - 1;
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+    current = index;
+    progress.style.width = (index / (slides.length - 1)) * 100 + '%';
+    const num = String(index + 1).padStart(2, '0');
+    const total = String(slides.length).padStart(2, '0');
+    counter.textContent = num + ' / ' + total;
+  }
+
+  function next() { if (current < slides.length - 1) showSlide(current + 1); }
+  function prev() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') {
+      e.preventDefault(); next();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault(); prev();
+    } else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(slides.length - 1); }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) return;
+    next();
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+  document.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (diff < -50) next();
+    if (diff > 50) prev();
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
